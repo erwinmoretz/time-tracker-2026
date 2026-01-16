@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import MonthPage from './pages/MonthPage';
+import WeekPage from './pages/WeekPage';
 import YearView from './pages/YearView';
 import OverviewPage from './pages/OverviewPage';
 import './index.css';
@@ -12,6 +13,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/month" replace />} />
           <Route path="/month" element={<MonthPage />} />
+          <Route path="/week" element={<WeekPage />} />
           <Route path="/year" element={<YearView />} />
           <Route path="/overview" element={<OverviewPage />} />
           <Route path="*" element={<Navigate to="/month" replace />} />

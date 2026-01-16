@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { format } from 'date-fns';
+import { de } from 'date-fns/locale';
 import { Save, Trash2, Clock, Briefcase, Palmtree, Thermometer, ArrowRight } from 'lucide-react';
 import { useTimeStore } from '@/store/timeStore';
-import { NeonButton, GlowingInput, ToggleSwitch } from '@/components/ui/Uiverse';
+import { GlowingInput } from '@/components/ui/Uiverse';
 import { Label } from '@/components/ui/Label';
 import { cn } from '@/lib/utils';
 import { isWeekend, getHolidayName } from '@/utils/holidays';
@@ -99,80 +100,94 @@ const DailyEntryForm = ({ date, onComplete }) => {
     const holidayName = getHolidayName(dateStr);
 
     return (
-        <div className="space-y-6">
-            <div className="text-center mb-6">
-                <h3 className="text-2xl font-bold text-foreground tracking-tight">{format(date, 'dd.MM.yyyy')}</h3>
-                <p className={cn("text-muted-foreground font-medium uppercase text-xs tracking-widest", (isWknd || holidayName) && "text-amber-500")}>
-                    {holidayName ? holidayName : format(date, 'EEEE')}
+        <div className="space-y-5 p-5">
+            {/* Header */}
+            <div className="text-center">
+                <h3 className="text-xl font-semibold text-[hsl(var(--foreground))]">
+                    {format(date, 'dd. MMMM yyyy', { locale: de })}
+                </h3>
+                <p className={cn(
+                    "text-sm text-[hsl(var(--muted-foreground))] mt-1",
+                    (isWknd || holidayName) && "text-amber-500"
+                )}>
+                    {holidayName ? holidayName : format(date, 'EEEE', { locale: de })}
                 </p>
             </div>
 
             {/* Type Selection */}
-            <div className="flex flex-wrap gap-2 justify-center">
+            <div className="flex gap-2 justify-center">
                 {typeOptions.map((option) => (
-                    <NeonButton
+                    <button
                         key={option.id}
-                        active={formData.type === option.id}
                         onClick={() => handleTypeChange(option.id)}
-                        className="flex-1 min-w-[80px] px-2 py-3 text-[10px]"
+                        className={cn(
+                            "flex-1 py-2.5 px-3 rounded-lg border text-xs font-medium transition-all duration-200",
+                            formData.type === option.id
+                                ? "bg-[hsl(var(--primary))] text-white border-transparent"
+                                : "bg-transparent border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--primary))] hover:text-[hsl(var(--primary))]"
+                        )}
                     >
-                        <option.icon className="w-5 h-5 mx-auto mb-1.5" />
+                        <option.icon className="w-4 h-4 mx-auto mb-1" />
                         {option.label}
-                    </NeonButton>
+                    </button>
                 ))}
             </div>
 
             {/* Time Inputs */}
-            <div className="grid grid-cols-[1fr_auto_1fr] gap-4 items-end">
-                <div className="space-y-1">
-                    <Label className="text-[10px] uppercase font-bold text-primary/70 ml-1 tracking-widest">Start</Label>
+            <div className="grid grid-cols-[1fr_auto_1fr] gap-3 items-end">
+                <div className="space-y-1.5">
+                    <Label className="text-xs text-[hsl(var(--muted-foreground))] ml-1">Start</Label>
                     <GlowingInput
                         name="start"
                         type="time"
                         value={formData.start}
                         onChange={handleChange}
-                        className="text-center text-xl h-16 bg-black/40 border-primary/20 text-white font-mono"
+                        className="text-center text-lg h-14 font-mono"
                     />
                 </div>
-                <div className="pb-5 text-primary/50">
-                    <ArrowRight className="w-5 h-5" />
+                <div className="pb-4 text-[hsl(var(--muted-foreground))]">
+                    <ArrowRight className="w-4 h-4" />
                 </div>
-                <div className="space-y-1">
-                    <Label className="text-[10px] uppercase font-bold text-primary/70 ml-1 tracking-widest">Ende</Label>
+                <div className="space-y-1.5">
+                    <Label className="text-xs text-[hsl(var(--muted-foreground))] ml-1">Ende</Label>
                     <GlowingInput
                         name="end"
                         type="time"
                         value={formData.end}
                         onChange={handleChange}
-                        className="text-center text-xl h-16 bg-black/40 border-primary/20 text-white font-mono"
+                        className="text-center text-lg h-14 font-mono"
                     />
                 </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                    <Label className="text-xs uppercase font-bold text-muted-foreground ml-1">Pause</Label>
+            {/* Break & Preview */}
+            <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1.5">
+                    <Label className="text-xs text-[hsl(var(--muted-foreground))] ml-1">Pause (min)</Label>
                     <GlowingInput
                         name="breakMinutes"
                         type="number"
-                        placeholder="0"
+                        placeholder="30"
                         value={formData.breakMinutes}
                         onChange={handleChange}
                         className="text-center"
                     />
                 </div>
-                <div className="flex items-end pb-1">
+                <div className="flex items-end">
                     <div className={cn(
-                        "w-full h-12 rounded-xl flex items-center justify-center gap-2 border font-bold transition-all",
-                        calculatePreview() ? "border-primary/50 bg-primary/10 text-primary shadow-[0_0_15px_rgba(21,83,93,0.2)]" : "border-border bg-secondary/30 text-muted-foreground"
+                        "w-full h-12 rounded-lg flex items-center justify-center text-lg font-semibold transition-all",
+                        calculatePreview()
+                            ? "bg-[hsl(var(--primary)/.1)] text-[hsl(var(--primary))] border border-[hsl(var(--primary)/.3)]"
+                            : "bg-[hsl(var(--card))] text-[hsl(var(--muted-foreground))] border border-[hsl(var(--border))]"
                     )}>
                         {calculatePreview() || "--"}
                     </div>
                 </div>
             </div>
 
-            <div className="space-y-1">
-                <Label className="text-xs uppercase font-bold text-muted-foreground ml-1">Notiz</Label>
+            {/* Notes */}
+            <div className="space-y-1.5">
+                <Label className="text-xs text-[hsl(var(--muted-foreground))] ml-1">Notiz</Label>
                 <GlowingInput
                     name="comment"
                     placeholder="Tätigkeit..."
@@ -181,21 +196,26 @@ const DailyEntryForm = ({ date, onComplete }) => {
                 />
             </div>
 
-            <div className="pt-4 flex items-center justify-between">
+            {/* Actions */}
+            <div className="pt-3 flex items-center justify-between">
                 <button
                     onClick={handleDelete}
                     disabled={!currentEntry}
-                    className="text-destructive text-sm font-medium hover:text-white transition-colors disabled:opacity-30 disabled:hover:text-destructive"
+                    className="text-[hsl(var(--destructive))] text-sm font-medium hover:opacity-70 transition-opacity disabled:opacity-30"
                 >
-                    Eintrag löschen
+                    Löschen
                 </button>
 
-                <NeonButton onClick={handleSave} className="px-8 shadow-lg">
+                <button
+                    onClick={handleSave}
+                    className="px-6 py-2.5 rounded-lg font-medium text-sm bg-[hsl(var(--primary))] text-white hover:opacity-90 transition-opacity"
+                >
                     {statusMessage || "Speichern"}
-                </NeonButton>
+                </button>
             </div>
         </div>
     );
 };
 
 export default DailyEntryForm;
+

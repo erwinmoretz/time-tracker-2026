@@ -2,40 +2,34 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 
-// --- Neon Button ---
-// Based on Cyberpunk/Neon aesthetics.
-// High contrast border, glow on hover.
+// --- Minimal Button ---
+// Clean, simple button with subtle hover state
 export const NeonButton = ({ children, className, onClick, active, ...props }) => {
     return (
         <button
             onClick={onClick}
             className={cn(
-                "relative group px-6 py-2 bg-transparent overflow-hidden rounded-full transition-all duration-300",
-                "border border-primary text-primary hover:text-primary-foreground",
-                "hover:shadow-[0_0_20px_rgba(35,237,237,0.4)]", // Sherpa 400 Glow
-                active && "bg-primary text-primary-foreground shadow-[0_0_20px_rgba(35,237,237,0.6)] font-bold",
+                "relative px-5 py-2.5 rounded-lg transition-all duration-200",
+                "border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]",
+                "hover:border-[hsl(var(--primary))] hover:text-[hsl(var(--primary))]",
+                "hover:bg-[hsl(var(--primary)/.05)]",
+                active && "bg-[hsl(var(--primary))] text-white border-transparent font-medium",
                 className
             )}
             {...props}
         >
-            <span className={cn(
-                "absolute inset-0 w-0 bg-primary transition-all duration-[250ms] ease-out group-hover:w-full",
-                active && "w-full"
-            )}></span>
-            <span className="relative z-10 tracking-wide uppercase text-xs">{children}</span>
+            <span className="relative z-10 text-xs font-medium tracking-wide">{children}</span>
         </button>
     );
 };
 
-// --- Glass Card ---
-// Premium frosted glass effect for Dark Mode.
-// Matches 'Create budgets' card style: potential gradient or dark feel.
+// --- Clean Card ---
+// Minimal card with subtle border, no glows
 export const GlassCard = ({ children, className }) => {
     return (
         <div className={cn(
-            "relative bg-[#131517] backdrop-blur-xl border border-white/5 rounded-[2rem] p-6 shadow-2xl overflow-hidden", // Deep dark background
-            "before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/5 before:to-transparent before:pointer-events-none",
-            "after:absolute after:-top-20 after:-right-20 after:w-40 after:h-40 after:bg-primary/20 after:blur-[60px] after:rounded-full after:pointer-events-none", // Ambient glow
+            "bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-xl p-5",
+            "transition-colors duration-200",
             className
         )}>
             {children}
@@ -43,36 +37,38 @@ export const GlassCard = ({ children, className }) => {
     );
 };
 
-// --- Fancy Toggle Switch ---
-// Smooth, animated switch.
+// --- Toggle Switch ---
+// Clean, iOS-style toggle
 export const ToggleSwitch = ({ checked, onChange, label }) => {
     return (
         <label className="flex items-center cursor-pointer gap-3">
             <div className="relative">
                 <input type="checkbox" className="sr-only" checked={checked} onChange={onChange} />
                 <div className={cn(
-                    "w-12 h-7 bg-secondary rounded-full border border-input shadow-inner transition-colors duration-300",
-                    checked && "bg-primary border-primary"
+                    "w-11 h-6 bg-[hsl(var(--muted))] rounded-full transition-colors duration-200",
+                    checked && "bg-[hsl(var(--primary))]"
                 )}></div>
                 <div className={cn(
-                    "absolute top-1 left-1 w-5 h-5 bg-white rounded-full shadow-md transition-transform duration-300",
+                    "absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow-sm transition-transform duration-200",
                     checked && "translate-x-5"
                 )}></div>
             </div>
-            {label && <span className="font-medium text-sm text-foreground select-none">{label}</span>}
+            {label && <span className="font-medium text-sm text-[hsl(var(--foreground))] select-none">{label}</span>}
         </label>
     );
 };
 
-// --- Glowing Input ---
-// An input that glows when focused.
+// --- Clean Input ---
+// Minimal input with subtle focus state
 export const GlowingInput = React.forwardRef(({ className, ...props }, ref) => {
     return (
         <input
             ref={ref}
             className={cn(
-                "flex h-12 w-full rounded-xl border border-input bg-secondary/50 px-4 py-2 text-sm text-foreground shadow-sm transition-all duration-300",
-                "placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary focus:shadow-[0_0_15px_rgba(21,83,93,0.3)]",
+                "flex h-12 w-full rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-4 py-2 text-sm text-[hsl(var(--foreground))]",
+                "placeholder:text-[hsl(var(--muted-foreground))]",
+                "focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-1 focus:ring-[hsl(var(--primary))]",
+                "transition-all duration-200",
                 className
             )}
             {...props}
@@ -81,17 +77,17 @@ export const GlowingInput = React.forwardRef(({ className, ...props }, ref) => {
 });
 GlowingInput.displayName = "GlowingInput";
 
-// --- Shadow Button ---
-// Animated glowing button.
+// --- Minimal Button ---
+// Clean button with subtle styling
 export const ShadowButton = ({ children, onClick, className, size = "md" }) => {
     return (
         <button
             onClick={onClick}
             className={cn(
-                "border-none text-white rounded-[7px] font-bold uppercase transition-all duration-500",
-                "bg-primary shadow-[0_0_25px_rgba(35,237,237,0.6)]",
-                "hover:shadow-[0_0_5px_rgba(35,237,237,1),0_0_25px_rgba(35,237,237,1),0_0_50px_rgba(35,237,237,1),0_0_100px_rgba(35,237,237,1)]",
-                size === "sm" ? "py-2 px-4 text-xs tracking-[2px]" : "py-[10px] px-[20px] text-[17px] tracking-[4px]",
+                "text-[hsl(var(--muted-foreground))] rounded-lg font-medium transition-all duration-200",
+                "border border-[hsl(var(--border))] bg-transparent",
+                "hover:bg-[hsl(var(--card-hover))] hover:text-[hsl(var(--foreground))] hover:border-[hsl(var(--foreground)/.2)]",
+                size === "sm" ? "py-2 px-3 text-xs" : "py-2.5 px-4 text-sm",
                 className
             )}
         >
@@ -99,3 +95,24 @@ export const ShadowButton = ({ children, onClick, className, size = "md" }) => {
         </button>
     );
 };
+
+// --- Primary Button ---
+// Solid blue button for main actions
+export const PrimaryButton = ({ children, onClick, className, disabled }) => {
+    return (
+        <button
+            onClick={onClick}
+            disabled={disabled}
+            className={cn(
+                "px-5 py-2.5 rounded-lg font-medium text-sm transition-all duration-200",
+                "bg-[hsl(var(--primary))] text-white",
+                "hover:bg-[hsl(var(--primary-muted))]",
+                "disabled:opacity-50 disabled:cursor-not-allowed",
+                className
+            )}
+        >
+            {children}
+        </button>
+    );
+};
+
