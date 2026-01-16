@@ -3,70 +3,82 @@
 @import "tailwindcss";
 
 :root {
-  /* Sherpa Blue Palette */
-  --sherpa-50: 175 100% 96%;
-  /* #ECFFFD */
-  --sherpa-100: 176 100% 90%;
-  /* #CFFEFC */
-  --sherpa-200: 175 94% 82%;
-  /* #A5FCF9 */
-  --sherpa-300: 176 90% 69%;
-  /* #68F8F5 */
-  --sherpa-400: 176 83% 53%;
-  /* #23EDED - Bright Neon Cyan */
-  --sherpa-500: 177 94% 43%;
-  /* #07D0D3 */
-  --sherpa-600: 183 90% 36%;
-  /* #09A7B1 */
-  --sherpa-700: 185 82% 31%;
-  /* #0E8590 */
-  --sherpa-800: 186 69% 27%;
-  /* #156B75 */
-  --sherpa-900: 188 63% 22%;
-  /* #15535D - User Requested Deep Teal */
-  --sherpa-950: 189 79% 15%;
-  /* #083B44 */
-
-  --background: 0 0% 5%;
-  /* #0d0d0d - Deep Black/Grey */
-  --foreground: 0 0% 100%;
-  /* White */
-
-  /* Map Primary to Bright Cyan for Text/Glow, but use Deep Teal for backgrounds if needed */
-  --primary: 176 83% 53%;
-  /* #23EDED (Sherpa 400) for Neon Pop */
-  --primary-foreground: 188 63% 22%;
-  /* Dark Text on Bright Cyan */
-
-  --secondary: 0 0% 11%;
-  /* Dark Card Background */
-  --secondary-foreground: 0 0% 100%;
-
-  --muted: 188 63% 15%;
-  /* Subtle dark teal tint */
-  --muted-foreground: 176 30% 60%;
-
-  --card: 0 0% 8%;
-  /* Slightly lighter than bg */
-  --card-foreground: 0 0% 100%;
-
-  --destructive: 0 100% 60%;
+  /* Minimalist Color Palette - Apple/Notion Style */
+  
+  /* Backgrounds */
+  --background: 0 0% 4%;          /* #0a0a0a - Pure dark */
+  --foreground: 0 0% 98%;         /* #fafafa - Clean white */
+  
+  /* Cards & Surfaces */
+  --card: 0 0% 8%;                /* #141414 - Subtle card bg */
+  --card-foreground: 0 0% 98%;
+  --card-hover: 0 0% 11%;         /* #1c1c1c - Hover state */
+  
+  /* Accent - Single Blue */
+  --primary: 217 91% 60%;         /* #3b82f6 - Soft blue */
+  --primary-foreground: 0 0% 100%;
+  --primary-muted: 217 91% 50%;   /* Darker blue for hover */
+  
+  /* Secondary */
+  --secondary: 0 0% 11%;          /* #1c1c1c */
+  --secondary-foreground: 0 0% 98%;
+  
+  /* Muted Text */
+  --muted: 0 0% 15%;              /* #262626 */
+  --muted-foreground: 0 0% 45%;   /* #737373 - Gray text */
+  
+  /* Borders - Very subtle */
+  --border: 0 0% 15%;             /* #262626 */
+  --border-subtle: 0 0% 12%;      /* Even more subtle */
+  
+  /* Input */
+  --input: 0 0% 15%;
+  --ring: 217 91% 60%;
+  
+  /* Status Colors - Muted */
+  --success: 142 71% 45%;         /* Green */
+  --warning: 38 92% 50%;          /* Orange */
+  --destructive: 0 72% 51%;       /* Red */
   --destructive-foreground: 0 0% 100%;
-
-  --border: 188 63% 22%;
-  /* Sherpa 900 as border */
-  --input: 188 63% 22%;
-  --ring: 176 83% 53%;
-  /* Glow color */
-
-  --radius: 1.5rem;
-  /* Matches the rounded cards in image */
+  
+  /* Entry Type Colors */
+  --type-work: 217 91% 60%;       /* Blue */
+  --type-vacation: 199 89% 48%;   /* Cyan/Teal */
+  --type-sick: 0 72% 51%;         /* Red */
+  --type-flex: 38 92% 50%;        /* Orange */
+  
+  /* Radius - Clean rounded */
+  --radius: 0.75rem;              /* 12px - Less extreme rounding */
+  --radius-lg: 1rem;              /* 16px */
+  --radius-sm: 0.5rem;            /* 8px */
 }
 
 body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+}
+
+/* Remove default focus outlines, add custom */
+*:focus {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: 2px solid hsl(var(--primary));
+  outline-offset: 2px;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Selection color */
+::selection {
+  background-color: hsl(var(--primary) / 0.3);
+  color: hsl(var(--foreground));
 }
