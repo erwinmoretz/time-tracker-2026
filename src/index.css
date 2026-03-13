@@ -82,3 +82,32 @@ html {
   background-color: hsl(var(--primary) / 0.3);
   color: hsl(var(--foreground));
 }
+
+/* ===== Entry Type Utilities ===== */
+/* Einheitliche Farbklassen für alle Eintragstypen – verwendet die CSS-Variablen */
+
+.entry-work {
+  background-color: hsl(var(--type-work) / 0.15);
+  color: hsl(var(--type-work) / 0.9);
+  border: 1px solid hsl(var(--type-work) / 0.25);
+}
+.entry-vacation {
+  background-color: hsl(var(--type-vacation) / 0.15);
+  color: hsl(var(--type-vacation) / 0.9);
+  border: 1px solid hsl(var(--type-vacation) / 0.25);
+}
+.entry-sick {
+  background-color: hsl(var(--type-sick) / 0.15);
+  color: hsl(var(--type-sick) / 0.9);
+  border: 1px solid hsl(var(--type-sick) / 0.25);
+}
+.entry-flex {
+  background-color: hsl(var(--type-flex) / 0.15);
+  color: hsl(var(--type-flex) / 0.9);
+  border: 1px solid hsl(var(--type-flex) / 0.25);
+}
+.entry-holiday {
+  background-color: hsl(0 72% 51% / 0.1);
+  color: hsl(0 72% 70%);
+  border: 1px solid hsl(0 72% 51% / 0.2);
+}

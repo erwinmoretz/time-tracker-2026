@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, getDay, isToday, addMonths, subMonths, parseISO, isValid } from 'date-fns';
 import { de } from 'date-fns/locale';
-import { ChevronLeft, ChevronRight, X, List, Grid } from 'lucide-react';
+import { ChevronLeft, ChevronRight, List, Grid } from 'lucide-react';
 import { GlassCard, NeonButton, ShadowButton } from '@/components/ui/Uiverse';
 import { VisualToggle } from '@/components/ui/VisualToggle';
 import { Button } from '@/components/ui/Button';
@@ -11,6 +11,7 @@ import { isHoliday, isWeekend, getHolidayName } from '@/utils/holidays';
 import { useTimeStore } from '@/store/timeStore';
 import { cn } from '@/lib/utils';
 import DailyEntryForm from '@/components/DailyEntryForm';
+import ModalOverlay from '@/components/ui/ModalOverlay';
 
 const MonthPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -99,16 +100,14 @@ const MonthPage = () => {
                             const entry = getEntry(dateStr);
                             const isHol = isHoliday(dateStr);
                             const holName = getHolidayName(dateStr);
-                            const isWknd = isWeekend(date);
 
                             let bgClass = "bg-secondary/20 hover:bg-white/10 text-muted-foreground";
                             if (isToday(date)) bgClass = "bg-primary text-white shadow-glow border-primary scale-105 z-10";
                             else if (entry) {
-                                if (entry.type === 'work') bgClass = "bg-emerald-500/20 text-emerald-200 border border-emerald-500/30";
-                                else if (entry.type === 'vacation') bgClass = "bg-sky-500/20 text-sky-200 border border-sky-500/30";
-                                else if (entry.type === 'sick') bgClass = "bg-rose-500/20 text-rose-200 border border-rose-500/30";
+                                const typeClass = { work: 'entry-work', vacation: 'entry-vacation', sick: 'entry-sick', flex: 'entry-flex' }[entry.type];
+                                if (typeClass) bgClass = typeClass;
                             }
-                            else if (isHol) bgClass = "bg-red-500/10 text-red-300 border border-red-500/20";
+                            else if (isHol) bgClass = "entry-holiday";
 
                             const tooltipContent = (
                                 <div className="text-center space-y-1">
@@ -200,22 +199,9 @@ const MonthPage = () => {
 
             {/* Modal Overlay */}
             {selectedDate && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-                    <div className="relative w-full max-w-md">
-                        <button
-                            onClick={closeModal}
-                            className="absolute -top-12 right-0 p-2 text-white hover:text-primary transition-colors"
-                        >
-                            <X className="w-8 h-8" />
-                        </button>
-                        <GlassCard className="border-primary/30 shadow-[0_0_50px_rgba(21,83,93,0.3)]">
-                            <DailyEntryForm
-                                date={selectedDate}
-                                onComplete={() => {/* Optional reload? Store updates automatically */ }}
-                            />
-                        </GlassCard>
-                    </div>
-                </div>
+                <ModalOverlay onClose={closeModal}>
+                    <DailyEntryForm date={selectedDate} onComplete={closeModal} />
+                </ModalOverlay>
             )}
         </div>
     );

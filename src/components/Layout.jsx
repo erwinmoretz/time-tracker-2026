@@ -1,11 +1,8 @@
-import { Link, useLocation } from 'react-router-dom';
-import { cn } from '@/lib/utils';
-import { LayoutDashboard, Calendar, Clock, BarChart, CalendarDays } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Calendar, Clock, BarChart, CalendarDays } from 'lucide-react';
 import { NavCard } from '@/components/ui/NavCard';
 
 const Layout = ({ children }) => {
-    const location = useLocation();
-
     const navItems = [
         { href: '/month', label: 'Monat', icon: Clock },
         { href: '/week', label: 'Woche', icon: CalendarDays },

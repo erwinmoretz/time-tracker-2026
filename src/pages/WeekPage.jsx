@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { format, startOfWeek, endOfWeek, eachDayOfInterval, addWeeks, subWeeks, parseISO, isValid, getWeek, getYear } from 'date-fns';
+import { format, startOfWeek, endOfWeek, eachDayOfInterval, addWeeks, subWeeks, parseISO, isValid, getWeek } from 'date-fns';
 import { de } from 'date-fns/locale';
 import { ChevronLeft, ChevronRight, Clock, AlertTriangle, TrendingUp, Calendar } from 'lucide-react';
 import { GlassCard, ShadowButton, NeonButton } from '@/components/ui/Uiverse';
@@ -9,13 +9,13 @@ import { isHoliday, isWeekend, getHolidayName } from '@/utils/holidays';
 import { useTimeStore } from '@/store/timeStore';
 import { cn } from '@/lib/utils';
 import DailyEntryForm from '@/components/DailyEntryForm';
-import { X } from 'lucide-react';
+import ModalOverlay from '@/components/ui/ModalOverlay';
 
 const WEEKLY_LIMIT_HOURS = 39;
 
 const WeekPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
-    const { getEntry, entries, hoursPerPT } = useTimeStore();
+    const { getEntry } = useTimeStore();
 
     // Initialize current week from URL or default to today
     const [currentDate, setCurrentDate] = useState(() => {
@@ -33,7 +33,6 @@ const WeekPage = () => {
     const weekEnd = endOfWeek(currentDate, { weekStartsOn: 1 });
     const weekDays = eachDayOfInterval({ start: weekStart, end: weekEnd });
     const weekNumber = getWeek(currentDate, { weekStartsOn: 1 });
-    const year = getYear(currentDate);
 
     // Sync URL
     useEffect(() => {
@@ -245,19 +244,11 @@ const WeekPage = () => {
                         let textClass = "text-muted-foreground";
 
                         if (entry) {
-                            if (entry.type === 'work') {
-                                bgClass = "bg-emerald-500/20 border border-emerald-500/30";
-                                textClass = "text-emerald-200";
-                            } else if (entry.type === 'vacation') {
-                                bgClass = "bg-sky-500/20 border border-sky-500/30";
-                                textClass = "text-sky-200";
-                            } else if (entry.type === 'sick') {
-                                bgClass = "bg-rose-500/20 border border-rose-500/30";
-                                textClass = "text-rose-200";
-                            }
+                            const typeClass = { work: 'entry-work', vacation: 'entry-vacation', sick: 'entry-sick', flex: 'entry-flex' }[entry.type];
+                            if (typeClass) { bgClass = typeClass; textClass = ''; }
                         } else if (isHol) {
-                            bgClass = "bg-red-500/10 border border-red-500/20";
-                            textClass = "text-red-300";
+                            bgClass = "entry-holiday";
+                            textClass = "";
                         } else if (isWknd) {
                             bgClass = "bg-secondary/10";
                             textClass = "text-muted-foreground/50";
@@ -332,22 +323,9 @@ const WeekPage = () => {
 
             {/* Modal Overlay */}
             {selectedDate && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-                    <div className="relative w-full max-w-md">
-                        <button
-                            onClick={closeModal}
-                            className="absolute -top-12 right-0 p-2 text-white hover:text-primary transition-colors"
-                        >
-                            <X className="w-8 h-8" />
-                        </button>
-                        <GlassCard className="border-primary/30 shadow-[0_0_50px_rgba(21,83,93,0.3)]">
-                            <DailyEntryForm
-                                date={selectedDate}
-                                onComplete={() => { }}
-                            />
-                        </GlassCard>
-                    </div>
-                </div>
+                <ModalOverlay onClose={closeModal}>
+                    <DailyEntryForm date={selectedDate} onComplete={closeModal} />
+                </ModalOverlay>
             )}
         </div>
     );

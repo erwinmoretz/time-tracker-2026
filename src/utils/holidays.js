@@ -1,4 +1,4 @@
-import { isWeekend, format, parseISO } from 'date-fns';
+import { isWeekend, format } from 'date-fns';
 export { isWeekend };
 
 export const HOLIDAYS_2026_HESSEN = {
